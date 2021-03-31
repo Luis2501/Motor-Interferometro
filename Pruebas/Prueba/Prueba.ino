@@ -1,8 +1,11 @@
 #include<LCD.h>
 #include <Wire.h>  // Lo trae Arduino IDE
 #include <LiquidCrystal_I2C.h> // Incluimos la libreria del LCD
+#include "LED.h"
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Seteamos la direccion I2C
+
+LED led;
 
 char opcion1 = '0';
 int data;
@@ -36,13 +39,13 @@ void loop(){
       
       case 'S':
       
-            digitalWrite(13, HIGH);
+            led.Encender(13);
       
         break;
         
       case 'N':
       
-           digitalWrite(13, LOW);
+           led.Apagar(13);
            
         break;
 

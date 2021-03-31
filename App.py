@@ -16,11 +16,7 @@ class MyApp(QtWidgets.QWidget):
      
 		QtWidgets.QWidget.__init__(self)
 
-		#menubar = self.menuBar() 
-		#file_menu = menubar.addMenu('&File') 
-		#help_menu = menubar.addMenu('&Help') 
-
-		self.edit = QtWidgets.QLineEdit(">>> \n >>>")
+		self.edit = QtWidgets.QLineEdit("")
 		self.edit.setClearButtonEnabled(False)       		
 
 		layout = QtWidgets.QVBoxLayout()
