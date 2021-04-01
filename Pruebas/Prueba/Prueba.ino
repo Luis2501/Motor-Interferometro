@@ -5,7 +5,7 @@
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Seteamos la direccion I2C
 
-LED led;
+LED led(13);
 
 char opcion1 = '0';
 int data;
@@ -39,13 +39,13 @@ void loop(){
       
       case 'S':
       
-            led.Encender(13);
+            led.Encender();
       
         break;
         
       case 'N':
       
-           led.Apagar(13);
+           led.Apagar();
            
         break;
 

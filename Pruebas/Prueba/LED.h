@@ -2,15 +2,29 @@ class LED{
 
 	public:
             
-		void LED::Encender(int pin){
+		int PIN;
 
-  			digitalWrite(pin, HIGH);
-		}
+		LED::LED(int pin);
 
-		void LED::Apagar(int pin){
-
-  		digitalWrite(pin, LOW);
-		}
-		
+		void LED::Encender();		
+		void LED::Apagar();
 
 };
+
+LED::LED(int pin){
+
+	PIN = pin;
+
+}
+
+void LED::Encender(){
+
+	digitalWrite(PIN, HIGH);
+
+}
+
+void LED::Apagar(){
+
+	digitalWrite(PIN, LOW);
+
+}

@@ -1,5 +1,5 @@
 """
-Interfaz gráfica para control de interferómetro
+Interfaz gráfica para control de interferómetro (Demo) sin Qt Designer
 
 Universidad Autonoma de Coahuila
 Facultad de Ciencias Físico Matemáticas 

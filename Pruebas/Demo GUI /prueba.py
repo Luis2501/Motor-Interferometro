@@ -1,3 +1,12 @@
+"""
+Interfaz gráfica para control de interferómetro (Demo) con Tkinter
+
+Universidad Autonoma de Coahuila
+Facultad de Ciencias Físico Matemáticas 
+
+dom 21 mar 2021 12:11:39 CST 
+"""
+
 from tkinter import *  
 import serial, time
 
