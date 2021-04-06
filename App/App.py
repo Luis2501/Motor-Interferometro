@@ -39,6 +39,10 @@ class MyApp(UI_CLASS, UI_BASE_CLASS, Motor):
 
 		self.Settings.List_Port.activated[str].connect(self.Select_Port_Serial)
 		
+		#Botón de Archivo----------------------------------
+
+		self.Quit_App.triggered.connect(app.quit)
+
 		#Condiciones inciales------------------------------
 
 		self.Arduino_Condition = False	
