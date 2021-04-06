@@ -8,7 +8,8 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Seteamos la d
 LED led(13);
 
 char opcion1 = '0';
-int data;
+String bufferString = "";
+int num;
 
 void setup() {
 
@@ -55,14 +56,13 @@ void loop(){
             lcd.print("Velocidad: "); 
             
             delay(2000);
-            String bufferString = "";
 
             while (Serial.available() > 0) {
                 bufferString += (char)Serial.read();
             }
             
             //Se transforma el buffer a un número entero
-            int num = bufferString.toInt();
+            num = bufferString.toInt();
             //Se imprime el número que se recibe
             //Serial.print("Numero recibido: ");
             Serial.println(num);

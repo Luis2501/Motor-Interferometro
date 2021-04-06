@@ -1,9 +1,18 @@
+/*
+Código Motor de interferómetro
+
+Utilizando la clase Motor, para controlar uno o más motores
+ */
+
 #include <Wire.h>
 #include <LCD.h>
 #include <LiquidCrystal_I2C.h>
 
 unsigned long ti,tf;
 float tiempo; 
+
+String bufferString = "";
+int Velocidad;
 
 void setup() {
   
@@ -66,34 +75,38 @@ void loop() {
          
       case 'V':
       
-        vel=vel + 100;
-        Serial.print("Vel: ");
-        Serial.println(vel);
-        break;
+         delay(2000);
+         
+         while (Serial.available() > 0) {
+             bufferString += (char)Serial.read();
+         }
+            
+         //Se transforma el buffer a un número entero
+         Velocidad = bufferString.toInt();
+         //Se imprime el número que se recibe
+          
+         Serial.print("Vel: ");
+         Serial.println(Velocidad);
+            
+         delay(2000);
+            
+         lcd.setCursor(13,3);
+         lcd.print(Velocidad);         
+
+         break;
         
-      case 'v':
-        vel=vel- 100;
-        Serial.print("Vel: ");
-        Serial.println(vel);
-        break;
-      case 'm':
-        vel=9000;
-        Serial.print("Vel: ");
-        Serial.println(vel);
-        break;
-      case 'M':
-        vel = VELOCIDAD;
-        Serial.print("Vel: ");
-        Serial.println(vel);
-        break;
       case 'x':
+      
         cont=0;
         lcd.clear();
         lcd.print("Contador = 0");
         delay(10);
         break;
-      default: 
+        
+      default:
+       
         analogWrite16(PWM_M1, 0);
+        
         break;
         
     }//Fin de switch
