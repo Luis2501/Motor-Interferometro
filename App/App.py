@@ -1,3 +1,5 @@
+#!/usr/bin/env python3 
+# -*- coding: utf-8 -*-
 """
 Interfaz gráfica para control de interferómetro
 
@@ -6,20 +8,22 @@ Facultad de Ciencias Físico Matemáticas
 
 dom 21 mar 2021 12:11:39 CST 
 """
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, QtCore #, uic
 from Settings import Ui_MainWindow2
+from Main import Ui_MainWindow
 from datetime import datetime
 from Motor import Motor
 import serial, time
 import sys
 
-UI_CLASS, UI_BASE_CLASS = uic.loadUiType("Main.ui")
+#UI_CLASS, UI_BASE_CLASS = uic.loadUiType("Main.ui")
 
-class MyApp(UI_CLASS, UI_BASE_CLASS, Motor):
+class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
 	def __init__(self):
 
-		UI_BASE_CLASS.__init__(self)
+		#UI_BASE_CLASS.__ini__(self)
+		QtWidgets.QMainWindow.__init__(self)
 
 		self.setupUi(self)
 	
