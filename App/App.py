@@ -8,7 +8,7 @@ Facultad de Ciencias Físico Matemáticas
 
 dom 21 mar 2021 12:11:39 CST 
 """
-from PyQt5 import QtWidgets, QtCore #, uic
+from PyQt5 import QtWidgets, QtCore, QtGui #, uic
 from Settings import Ui_MainWindow2
 from Main import Ui_MainWindow
 from datetime import datetime
@@ -24,9 +24,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
 		#UI_BASE_CLASS.__ini__(self)
 		QtWidgets.QMainWindow.__init__(self)
+		Ui_MainWindow.__init__(self)
 
 		self.setupUi(self)
 	
+		self.setWindowIcon(QtGui.QIcon('Motor.png'))	
+		
 		#Ventana de ajustes-------------------------------
 		
 		self.Window_Settings_Port = QtWidgets.QMainWindow()
