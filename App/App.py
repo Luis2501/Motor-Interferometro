@@ -147,7 +147,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
 		try:
 
-			self.arduino = serial.Serial(self.Port_Serial, baudrate=9600, timeout=1.0)
+			self.arduino = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=1.0)
 	
 			self.Arduino_Condition = True
 
