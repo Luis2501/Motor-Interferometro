@@ -8,21 +8,111 @@ Facultad de Ciencias Físico Matemáticas
 
 dom 21 mar 2021 12:11:39 CST 
 """
-from PyQt5 import QtWidgets, QtCore, QtGui #, uic
-from Settings import Ui_MainWindow2
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
+#from Settings import Ui_MainWindow2
 from Main import Ui_MainWindow
 from datetime import datetime
-from Motor import Motor
 import serial, time
 import sys
 
-#UI_CLASS, UI_BASE_CLASS = uic.loadUiType("Main.ui")
+class Motor:
+
+	def Select(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'V')
+			self.arduino.write(bytes(str(self.Velocity_1.value()), "utf-8"))
+
+			self.Display.append(">>> Velocidad seleccionada")
+			self.Display.append(">>> Vel: " + str(self.Velocity_1.value()) + "\n")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Select_Cycle(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'C')
+
+			self.Display.append(">>> Iniciando ciclo")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Test(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'P')
+
+			self.Display.append(">>> Iniciando prueba")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Advance1(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'F')
+
+			self.Display.append(">>> Avanzando")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Advance0(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'B')
+
+			self.Display.append(">>> Avanzando")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Open(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'a')
+
+			self.Display.append(">>> Abriendo")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+	def Close(self):
+
+		if self.Arduino_Condition:
+
+			self.arduino.write(b'c')
+
+			self.Display.append(">>> Cerrando")
+
+		else:
+
+			self.Display.append(">>> Arduino no conectado \n")
+
+
+#UI_CLASS, UI_BASE_CLASS = uic.loadUiType("Main.ui")				#Se utiliza siempre que se hacen cambios
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
+#class MyApp(UI_CLASS, UI_BASE_CLASS, Motor):
+
 	def __init__(self):
 
-		#UI_BASE_CLASS.__ini__(self)
+		#UI_BASE_CLASS.__init__(self)
 		QtWidgets.QMainWindow.__init__(self)
 		Ui_MainWindow.__init__(self)
 
@@ -30,21 +120,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 	
 		self.setWindowIcon(QtGui.QIcon('Motor.png'))	
 		
-		#Ventana de ajustes-------------------------------
+		#Ventana de ajustes------------------------------- **Si se requiere**
 		
-		self.Window_Settings_Port = QtWidgets.QMainWindow()
-		self.Settings = Ui_MainWindow2()
-		self.Settings.setupUi(self.Window_Settings_Port)
+		#self.Window_Settings_Port = QtWidgets.QMainWindow()
+		#self.Settings = Ui_MainWindow2()
+		#self.Settings.setupUi(self.Window_Settings_Port)
 
-		self.Linux = [f"/dev/ttyACM{i}" for i in range(21)]
-		self.Windows = [f"C0M{i}" for i in range(21)]
+		#self.Serial_Port.triggered.connect(self.Window_Settings_Port.show)
 
-		self.Serial_Port.triggered.connect(self.Window_Settings_Port.show)
+		#self.Settings.Button_Windows.toggled.connect(self.Show_List)
+		#self.Settings.Button_Linux.toggled.connect(self.Show_List)
 
-		self.Settings.Button_Windows.toggled.connect(self.Show_List)
-		self.Settings.Button_Linux.toggled.connect(self.Show_List)
-
-		self.Settings.List_Port.activated[str].connect(self.Select_Port_Serial)
+		#self.Settings.List_Port.activated[str].connect(self.Select_Port_Serial)
 		
 		#Botón de Archivo----------------------------------
 
@@ -54,7 +141,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
 		self.Arduino_Condition = False	
 
-		self.Button_Connection()
+		self.Button_Connection() 
+
+		self.Serial = [f"/dev/ttyACM{i}" for i in range(21)] + [f"COM{i}" for i in range(21)]  
+		self.Serial += [f"/dev/ttyUSB{i}" for i in range(21)]
 
 		self.Clean_Display.clicked.connect(self.Clean)
 		self.Display.append(">>> MotorControl GIU (" + str(datetime.now()) + ") \n")		
@@ -92,13 +182,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 		self.Display.clear()
 		self.Display.append(">>> MotorControl GIU (" + str(datetime.now()) + ") \n")
 
-	def Select_Port_Serial(self, Port_Serial):
-
-		self.Port_Serial = Port_Serial
-
-		self.Display.append(">>> Puerto seleccionado")
-		self.Display.append(">>> Puerto: " + self.Port_Serial + "\n")
-
 	def Select_Motor(self):
 
 		if self.Motor_1.isChecked():
@@ -121,41 +204,30 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 
 				self.Buttons[i].setEnabled(True)		
 
-	def Show_List(self):
-
-		if self.Settings.Button_Windows.isChecked():
-
-			self.Settings.List_Port.clear()
-
-			for k in range(len(self.Windows)):
-
-				self.Settings.List_Port.addItem(self.Windows[k]) 
-
-		elif self.Settings.Button_Linux.isChecked():
-
-			self.Settings.List_Port.clear()	
-
-			for k in range(len(self.Linux)):
-
-				self.Settings.List_Port.addItem(self.Linux[k]) 
-
-		else: 
-
-			self.Display.append(">>> Error al mostrar puertos \n")
-
 	def Connect(self):
 
-		try:
+		for Port, i in zip(self.Serial, range(len(self.Serial))):
 
-			self.arduino = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=1.0)
+			try:
+
+				self.arduino = serial.Serial(Port, baudrate=9600, timeout=1.0)
 	
-			self.Arduino_Condition = True
-
-			self.Display.append(">>> Arduino conectado \n")
+				self.Display.append(">>> Puerto seleccionado")
+				self.Display.append(">>> Puerto: " + Port + "\n")
 		
-		except:
+				self.Arduino_Condition = True
 
-			self.Display.append(">>> Fallo al conectar con arduino \n")
+				self.Display.append(">>> Arduino conectado \n")
+		
+				break
+
+			except:
+			
+				if i == (len(self.Serial) -1):
+
+					self.Display.append(">>> Fallo al conectar con arduino \n") 
+
+				pass
 
 	def Disconnect(self):
 
@@ -164,14 +236,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow, Motor):
 			self.arduino.close()
 			self.Arduino_Condition = False	
 
-		except:
-
-			pass
-
-		finally:		
-
 			self.Display.append(">>> Arduino desconectado \n")
 
+		except:
+
+			self.Display.append(">>> Arduino no conectado \n")		
 
 if __name__ == '__main__':					
 
